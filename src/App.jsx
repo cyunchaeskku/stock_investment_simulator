@@ -22,7 +22,7 @@ export default function App() {
 
 
 	return (
-		<div className='container'>
+		<div className='container'> 
 			<h1>주식 투자 시뮬레이터 </h1>
 			<p className='main-description'>
 				매달 일정 금액을 투자했을 때의 수익률을 계산해보세요.
