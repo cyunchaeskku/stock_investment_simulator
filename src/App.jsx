@@ -12,6 +12,8 @@ import {
     ResponsiveContainer,
 } from 'recharts';
 
+export const API_BASE_URL = "http://13.125.246.95:8000";
+
 export default function App() {
     const [monthlyAmount, setMonthlyAmount] = useState(1_000_000);
     const [weeklyAmount, setWeeklyAmount] = useState(250_000);
@@ -31,20 +33,28 @@ export default function App() {
     async function fetchPrices() {
         setLoading(true);
         try {
-            const startStr = startDate.toISOString().split('T')[0];
-            const endStr = endDate.toISOString().split('T')[0];
-
-            const res = await fetch(
-                `http://127.0.0.1:8000/price/yahoo?symbol=${ticker}&start=${startStr}&end=${endStr}`
-            );
-            const data = await res.json();
-            setPrices(data.data);
+          const startStr = startDate.toISOString().split('T')[0];
+          const endStr = endDate.toISOString().split('T')[0];
+      
+          const priceRes = await fetch(
+            `${API_BASE_URL}/price/yahoo?symbol=${ticker}&start=${startStr}&end=${endStr}`
+          );
+      
+          if (!priceRes.ok) {
+            throw new Error(`Price API failed: ${priceRes.status}`);
+          }
+      
+          const priceData = await priceRes.json();
+          console.log("✅ 가격 데이터:", priceData);
+      
+          setPrices(priceData.data);
         } catch (err) {
-            console.error('data load error:', err);
+          console.error("❌ 데이터 로드 에러:", err);
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    }
+      }
+      
 
     function calculateInvestmentReturn(prices, weeklyAmount) {
         if (!prices || prices.length === 0) return [];

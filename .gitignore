@@ -27,3 +27,4 @@ dist-ssr
 
 .venv/
 .env
+.cyunchaeskku_aws.pem
